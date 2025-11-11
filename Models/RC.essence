@@ -1,0 +1,16 @@
+
+given dataset : sequence of (set of int, int)
+
+letting n be max([ x | (_, (xs, _)) <- dataset, x <- xs ])
+letting options be domain int(1..n)
+
+letting nbObservations be |dataset|
+
+find score : int(0..nbObservations)
+
+find rel : relation (partialOrder, total) of (options * options)
+
+$ rational choice
+such that nbObservations - score = sum (_, (s,c)) in dataset . toInt(forAll i in s . rel(c,i))
+
+

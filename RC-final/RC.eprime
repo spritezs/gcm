@@ -1,0 +1,16 @@
+find score: int(0..nbObservations)
+find rel_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1)
+such that
+    nbObservations - score =
+    sum q8: int (1..fin1) .
+    toInt(and([rel_RelationAsMatrix
+                        [dataset_ExplicitBoundedR6_Values_2[q8],
+                         dataset_ExplicitBoundedR6_Values_1_ExplicitVarSizeWithDummy[q8, q9]] = 1
+                        | q9 : int(1..fin2),
+                          dataset_ExplicitBoundedR6_Values_1_ExplicitVarSizeWithDummy[q8, q9] != fin4 + 1])),
+
+   and([(rel_RelationAsMatrix[q2, q3] + rel_RelationAsMatrix[q3, q2]) >= 1| q2 : int(1..n), q3 : int(1..n)]),
+   and([rel_RelationAsMatrix[q2, q2] = 1 | q2 : int(1..n)]),
+   and([(rel_RelationAsMatrix[q2, q3] + rel_RelationAsMatrix[q3, q2]) = 2 -> q2 = q3 | q2 : int(1..n), q3 : int(1..n)]),
+   and([rel_RelationAsMatrix[q2, q3] /\ rel_RelationAsMatrix[q3, q4] -> rel_RelationAsMatrix[q2, q4]
+            | q2 : int(1..n), q3 : int(1..n), q4 : int(1..n)])

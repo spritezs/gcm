@@ -1,0 +1,37 @@
+
+given dataset : sequence of (set of int, int)
+
+letting n be max([ x | (_, (xs, _)) <- dataset, x <- xs ])
+letting options be domain int(1..n)
+
+letting nbObservations be |dataset|
+
+find omitList : sequence (size nbObservations) of bool
+
+$ Maximal size to find all complete solutions.
+find G : function (total, size 2**|options|-1) set (minSize 1) of options --> set (minSize 1) of options
+
+$ (i,j) means i is preferred to j
+find rel : relation (aSymmetric, connex, transitive) of (options * options)
+
+$ G(Ai) is a non-empty subset of Ai
+such that forAll (menu, filter) in G .
+        filter subsetEq menu /\ |filter| > 0 /\ |menu| > 0
+
+$ if an element x is not in G(Ai) then G(Ai) = G(Ai - x)
+such that forAll row : int(1..nbObservations) .
+    forAll x in dataset(row)[1] .
+        !(x in G(dataset(row)[1])) -> (G(dataset(row)[1]) = G((dataset(row)[1] - {x})))
+
+$ Choice, x, is selected from G(Ai) where no other element of G(Ai) > x
+such that forAll row : int(1..nbObservations) .
+    ((omitList(row) /\ !(dataset(row)[2] in G(dataset(row)[1]))) \/
+    (!omitList(row) /\ (dataset(row)[2] in G(dataset(row)[1])))) /\
+    (forAll (i, j) in rel . (i in G(dataset(row)[1]) /\ j in G(dataset(row)[1])) -> dataset(row)[2] != j)
+
+such that exists (menu, filter) in G .
+        |filter| > 1
+
+find score : int(0..nbObservations)
+such that score = sum row : int(1..nbObservations) . toInt(omitList(row))
+

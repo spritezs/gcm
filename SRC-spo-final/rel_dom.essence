@@ -1,0 +1,33 @@
+find rel1_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1)
+find rel2_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1)
+find score: int(0..nbObservations)
+such that
+
+
+score <= fromSol(score) /\
+
+(
+        (
+                (       
+                        $ rels are diff
+                        exists i: int(1..nbObservations) .
+                        exists j: int(1..n) .
+                        rel1_RelationAsMatrix[i,j]>fromSol(rel1_RelationAsMatrix)[i,j]
+                ) 
+
+                \/
+
+                (
+                        $ rels are diff
+                        exists i: int(1..nbObservations) .
+                        exists j: int(1..n) .
+                        rel2_RelationAsMatrix[i,j]>fromSol(rel2_RelationAsMatrix)[i,j]
+
+                )
+        ) 
+        
+        \/ 
+        
+        score<fromSol(score)
+
+)

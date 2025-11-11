@@ -1,0 +1,46 @@
+
+given dataset : sequence of (set of int, int)
+
+letting n be max([ x | (_, (xs, _)) <- dataset, x <- xs ])
+letting options be domain int(1..n)
+
+letting nbObservations be |dataset|
+
+find omitList : sequence (size nbObservations) of bool
+
+$ (i,j) means i is preferred to j
+find rel1 : relation (minSize 1, irreflexive, transitive) of (options * options)
+
+$ For each entry in the dataset, we will record the survivors after applying rel1.
+$ adding minSize 1 to the set here would disallow RC solutions
+find survivor1 : sequence (size nbObservations) of set of options
+
+find rel2 : relation (minSize 1, irreflexive, transitive) of (options * options)
+
+$ For each entry in the survivor1 set, we will record the survivors after applying rel2.
+$ size 1 - single valued choice
+find survivor2 : sequence (size nbObservations) of set (size 1) of options
+
+such that
+    forAll row : int(1..nbObservations) .
+        ((omitList(row) /\ !(dataset(row)[2] in survivor1(row))) \/
+        (!omitList(row) /\ (dataset(row)[2] in survivor1(row))))  /\
+        $ Element survives if it is not dominated by any other element of the set.
+        forAll x in dataset(row)[1] .
+            x in survivor1(row) <-> forAll y in dataset(row)[1] . !rel1(y, x)
+
+such that
+    forAll row : int(1..nbObservations) .
+        ((omitList(row) /\ !(dataset(row)[2] in survivor2(row))) \/
+        (!omitList(row) /\ (dataset(row)[2] in survivor2(row)))) /\ 
+        forAll x in survivor1(row) .
+            x in survivor2(row) <-> forAll y in survivor1(row) . !rel2(y, x)
+
+$ Distance score is min number of elements to be removed from dataset to comply perfectly with model.
+find score : int(0..nbObservations)
+such that score = sum row : int(1..nbObservations) . toInt(omitList(row))
+
+minimising score
+
+$ Unique solutions are defined by the preference relations, not by survivor sets.
+branching on [rel1, rel2]

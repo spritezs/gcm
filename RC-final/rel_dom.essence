@@ -1,0 +1,24 @@
+language ESSENCE' 1.0
+
+letting n be 4 
+letting nbObservations be 11
+find score: int(0..nbObservations)
+find rel_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1)
+such that
+
+
+score <= fromSol(score) /\
+
+(
+        (       
+                $ rels are diff
+                exists i: int(1..nbObservations) .
+                exists j: int(1..n) .
+                rel_RelationAsMatrix[i,j]>fromSol(rel_RelationAsMatrix)[i,j]
+        ) 
+        
+        \/ 
+        
+        score<fromSol(score)
+
+)
