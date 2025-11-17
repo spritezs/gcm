@@ -40,3 +40,54 @@ such that
 $ Distance score is min number of elements to be removed from dataset to comply perfectly with model.
 find score : int(0..nbObservations)
 such that score = sum row : int(1..nbObservations) . toInt(omitList(row))
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+$ rel1 acyclic
+
+$ path(x,y) iff there is a path from x to y
+find path1 : relation of (options * options)
+ 
+$ edges are paths
+such that forAll (x,y) in rel1, x!=y . path1(x,y)
+ 
+$ path from x->y AND y->z IMPLIES x->z
+such that forAll x,y,z : options . (path1(x,y) /\ path1(y,z)) -> path1(x,z)
+
+$ rel is acyclic
+such that forAll x : options . !path1(x,x)
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+$ rel2 acyclic
+
+$ path(x,y) iff there is a path from x to y
+find path2 : relation of (options * options)
+ 
+$ edges are paths
+such that forAll (x,y) in rel2, x!=y . path2(x,y)
+ 
+$ path from x->y AND y->z IMPLIES x->z
+such that forAll x,y,z : options . (path2(x,y) /\ path2(y,z)) -> path2(x,z)
+
+$ rel is acyclic
+such that forAll x : options . !path2(x,x)
+
+$ sol1
+$ sol2
+
+$ sol1.rel1
+$ sol1.rel2
+
+$ sol2.rel1
+$ sol2.rel2
+
+
+$ def dominates(sol1, sol2):
+$     and([ sol1.rel1 subsetEq sol2.rel1
+$         , sol1.rel2 subsetEq sol2.rel2
+$         , or([ sol1.rel1 subset sol2.rel1
+$              , sol1.rel2 subset sol2.rel2
+$              ])
+$         ])
+
+
+

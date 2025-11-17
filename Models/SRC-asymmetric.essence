@@ -9,13 +9,13 @@ letting nbObservations be |dataset|
 find omitList : sequence (size nbObservations) of bool
 
 $ (i,j) means i is preferred to j
-find rel1 : relation (minSize 1, irreflexive, transitive) of (options * options)
+find rel1 : relation (minSize 1, aSymmetric) of (options * options)
 
 $ For each entry in the dataset, we will record the survivors after applying rel1.
 $ adding minSize 1 to the set here would disallow RC solutions
 find survivor1 : sequence (size nbObservations) of set of options
 
-find rel2 : relation (minSize 1, irreflexive, transitive) of (options * options)
+find rel2 : relation (minSize 1, aSymmetric) of (options * options)
 
 $ For each entry in the survivor1 set, we will record the survivors after applying rel2.
 $ size 1 - single valued choice

@@ -7,8 +7,6 @@ find rel2_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1
 find survivor2_ExplicitBoundedR3_Length: int(nbObservations)
 find survivor2_ExplicitBoundedR3_Values_Explicit: matrix indexed by [int(1..nbObservations), int(1)] of int(1..n)
 find score: int(0..nbObservations)
-find path1_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1)
-find path2_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1)
 such that
     and([(omitList_ExplicitBounded_Values[row]=1 /\
           !and([survivor1_ExplicitBoundedR2_Values_Occurrence[row, dataset_ExplicitBoundedR6_Values_2[row]]=1,
@@ -52,17 +50,7 @@ such that
                   | q2 : int(1..n), row <= nbObservations])
              | row : int(1..nbObservations)]),
     score = sum([omitList_ExplicitBounded_Values[row] | row : int(1..nbObservations)]),
-    and([rel1_RelationAsMatrix[q30_1, q30_2]=1 -> path1_RelationAsMatrix[q30_1, q30_2]=1
-             | q30_1 : int(1..n), q30_2 : int(1..n), q30_1 != q30_2]),
-    and([path1_RelationAsMatrix[q4, y]=1 /\ path1_RelationAsMatrix[y, z]=1 -> path1_RelationAsMatrix[q4, z]=1
-             | q4 : int(1..n), y : int(1..n), z : int(1..n)]),
-    and([path1_RelationAsMatrix[q5, q5]=0 | q5 : int(1..n)]),
-    and([rel2_RelationAsMatrix[q32_1, q32_2]=1 -> path2_RelationAsMatrix[q32_1, q32_2]=1
-             | q32_1 : int(1..n), q32_2 : int(1..n), q32_1 != q32_2]),
-    and([path2_RelationAsMatrix[q7, y]=1 /\ path2_RelationAsMatrix[y, z]=1 -> path2_RelationAsMatrix[q7, z]=1
-             | q7 : int(1..n), y : int(1..n), z : int(1..n)]),
-    and([path2_RelationAsMatrix[q8, q8]=0 | q8 : int(1..n)]),
-    1 <= sum([sum([rel1_RelationAsMatrix[q15, q16] | q16 : int(1..n)]) | q15 : int(1..n)]),
-    and([rel1_RelationAsMatrix[q12, q12]=0 | q12 : int(1..n)]),
-    1 <= sum([sum([rel2_RelationAsMatrix[q23, q24] | q24 : int(1..n)]) | q23 : int(1..n)]),
-    and([rel2_RelationAsMatrix[q20, q20]=0 | q20 : int(1..n)])
+    1 <= sum([sum([rel1_RelationAsMatrix[q9, q10] | q10 : int(1..n)]) | q9 : int(1..n)]),
+    and([rel1_RelationAsMatrix[q6, q7]=1 -> rel1_RelationAsMatrix[q7, q6]=0 | q6 : int(1..n), q7 : int(1..n)]),
+    1 <= sum([sum([rel2_RelationAsMatrix[q17, q18] | q18 : int(1..n)]) | q17 : int(1..n)]),
+    and([rel2_RelationAsMatrix[q14, q15]=1 -> rel2_RelationAsMatrix[q15, q14]=0 | q14 : int(1..n), q15 : int(1..n)])

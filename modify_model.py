@@ -17,7 +17,7 @@ for i, line in enumerate(lines):
         start_index = i
         break
 
-with open(f"./Params/{param_name}.eprime-param", 'r') as file2:
+with open(f"./{output_dir}/eprime.params", 'r') as file2:
     additional_lines = file2.readlines()
 
 new_lines = additional_lines + lines[start_index:]
