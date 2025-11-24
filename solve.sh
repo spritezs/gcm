@@ -9,13 +9,13 @@ export MODEL_TYPE
 
 # ONLY RUN THIS FOR ONE MODEL AT A TIME. CANT RUN MANY MODELS IN PARALLEL
 
-find ./Params/*.param | parallel '
+find ./Params/*.param | parallel --j 80  --memfree 200G '
     param_file={};
     param_name=$(basename "$param_file" .param)
     echo "Processing parameter file: $param_name"
 
     # Create a unique output directory for each parallel task
-    output_dir="./output/conjure-output-${MODEL_TYPE}-${param_name}";
+    output_dir="./Output/conjure-output-${MODEL_TYPE}-${param_name}";
     rm -rf "$output_dir"
     mkdir -p "$output_dir";
 

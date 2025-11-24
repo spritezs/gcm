@@ -75,7 +75,7 @@ for line in final_lines:
         break  # Exit the loop when the keyword is found
     fl1.append(line)  # Use append() instead of add()
 
-with open(f"./{model}-final/{model}.eprime", 'r') as file:
+with open(f"./Final-models/{model}-final/{model}.eprime", 'r') as file:
     lines = file.readlines()
     fl1.extend(lines)
 

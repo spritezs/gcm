@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
 
-BASE_DIR = "output"  
+BASE_DIR = "Output"  
 ANALYSIS_FILENAME = "analysis"
 OUTPUT_FILE = "analysis_plot.png"
 
