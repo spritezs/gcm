@@ -24,7 +24,7 @@ find ./Params/*.param | parallel --j 80  --memfree 200G '
     conjure translate-parameter --eprime "$output_dir"/model000001.eprime --essence-param "$param_file" --eprime-param "$output_dir"/eprime.params
 
     python modify_model.py "$param_name" "$output_dir" "$MODEL_TYPE"
-    cp ./${MODEL_TYPE}-final/rel_dom.essence "$output_dir"
+    cp ./Final-models/${MODEL_TYPE}-final/rel_dom.essence "$output_dir"
 
     ../conjure-oxide/target/release/conjure-oxide solve --no-use-expand-ac  --output ${output_dir}/sols.json  ${output_dir}/${MODEL_TYPE}.eprime
 
