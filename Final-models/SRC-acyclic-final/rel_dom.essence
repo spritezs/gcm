@@ -1,6 +1,4 @@
-find rel1_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1)
-find rel2_RelationAsMatrix: matrix indexed by [int(1..n), int(1..n)] of int(0..1)
-find score: int(0..nbObservations)
+nbObservations, n, rel1_RelationAsMatrix, rel2_RelationAsMatrix, score
 such that
 
 
