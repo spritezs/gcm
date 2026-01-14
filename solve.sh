@@ -6,20 +6,20 @@ if [ -z "$1" ]; then
 fi
 MODEL_TYPE="$1"
 export MODEL_TYPE
-    param_file="$2"
+find ./Params/*.param | parallel --j 80  --memfree 200G '
+    param_file={}
     param_name=$(basename ${param_file} .param)
     echo "Processing parameter file: $param_name"
 
-    # Create a unique output directory for each parallel task
+    # create a unique output directory for each parallel task
     output_dir="./Output/conjure-output-${MODEL_TYPE}-${param_name}";
+
     rm -rf "$output_dir"
     mkdir -p "$output_dir";
 
-    # translate the Essence model to Essence'
     conjure --output-directory="$output_dir" ./Models/${MODEL_TYPE}.essence -ac
-
-    # translate the Essence parameters to Essence'
-    conjure translate-parameter --eprime "$output_dir"/model000001.eprime --essence-param ./Params/${param_file} --eprime-param "$output_dir"/eprime.params
+   
+    conjure translate-parameter --eprime "$output_dir"/model000001.eprime --essence-param ${param_file} --eprime-param "$output_dir"/eprime.params
 
     # modify the model to be solvable by Oxide
     python modify_model.py "$param_name" "$output_dir" "$MODEL_TYPE"
@@ -37,5 +37,6 @@ export MODEL_TYPE
         echo "Error: Unknown model type: $MODEL_TYPE"
         exit 1
     fi
-    
+
     mv "$output_dir"/non-dominated.json "./Solutions/${param_name}_${MODEL_TYPE}_non-dominated.json"
+    '
