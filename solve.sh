@@ -6,31 +6,29 @@ if [ -z "$1" ]; then
 fi
 MODEL_TYPE="$1"
 export MODEL_TYPE
-
-for param_file in ./Params/*.param; do
-    param_name=$(basename "$param_file" .param)
+    param_file="$2"
+    param_name=$(basename ${param_file} .param)
     echo "Processing parameter file: $param_name"
 
     # Create a unique output directory for each parallel task
-    output_dir="./Output/conjure-output-${MODEL_TYPE}-${param_name}"
+    output_dir="./Output/conjure-output-${MODEL_TYPE}-${param_name}";
     rm -rf "$output_dir"
-    mkdir -p "$output_dir"
+    mkdir -p "$output_dir";
 
+    # translate the Essence model to Essence'
     conjure --output-directory="$output_dir" ./Models/${MODEL_TYPE}.essence -ac
 
-    conjure translate-parameter \
-        --eprime "$output_dir/model000001.eprime" \
-        --essence-param "$param_file" \
-        --eprime-param "$output_dir/eprime.params"
+    # translate the Essence parameters to Essence'
+    conjure translate-parameter --eprime "$output_dir"/model000001.eprime --essence-param ./Params/${param_file} --eprime-param "$output_dir"/eprime.params
 
+    # modify the model to be solvable by Oxide
     python modify_model.py "$param_name" "$output_dir" "$MODEL_TYPE"
-    cp "./Final-models/${MODEL_TYPE}-final/rel_dom.essence" "$output_dir"
+    cp ./Final-models/${MODEL_TYPE}-final/rel_dom.essence "$output_dir"
 
-    ../conjure-oxide/target/release/conjure-oxide solve \
-        --no-use-expand-ac \
-        --output "${output_dir}/sols.json" \
-        "${output_dir}/${MODEL_TYPE}.eprime"
+    # call Oxide to solve
+    ../conjure-oxide/target/release/conjure-oxide solve --no-use-expand-ac  --output ${output_dir}/sols.json  ${output_dir}/${MODEL_TYPE}.eprime
 
+    # post-filtering
     if [[ "$MODEL_TYPE" == "RC" ]]; then
         python filter_dominant_solutions_RC.py "$output_dir"
     elif [[ "$MODEL_TYPE" == *"SRC"* ]]; then
@@ -39,7 +37,5 @@ for param_file in ./Params/*.param; do
         echo "Error: Unknown model type: $MODEL_TYPE"
         exit 1
     fi
-
-    mv "$output_dir/non-dominated.json" "./Solutions/${param_name}_${MODEL_TYPE}_non-dominated.json"
-done
-
+    
+    mv "$output_dir"/non-dominated.json "./Solutions/${param_name}_${MODEL_TYPE}_non-dominated.json"

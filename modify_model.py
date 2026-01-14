@@ -10,7 +10,7 @@ keywords = ["find", "letting", "such that"]
 with open(f"./{output_dir}/model000001.eprime", 'r') as file:
     lines = file.readlines()
 
-# Now find the first line that contains any of the keywords
+# find the first line that contains any of the keywords
 start_index = 0
 for i, line in enumerate(lines):
     if any(word in line for word in keywords):
@@ -23,10 +23,10 @@ with open(f"./{output_dir}/eprime.params", 'r') as file2:
 new_lines = additional_lines + lines[start_index:]
 new_lines = [line for line in new_lines if not line.startswith(("$","branching","minimising"))]
 
-# Create a dictionary to store the values of finX
+# crate a dictionary to store the values of finX
 fin_values = {}
 
-# Capture the values of fin1, fin2, etc.
+# store the values of fin1, fin2, etc.
 for line in new_lines:
     match = re.match(r'letting fin(\d+) be (\d+)', line)
     if match:
@@ -42,8 +42,7 @@ new_lines = [
     for line in new_lines
 ]
 
-
-# Now, remove the block starting with 'letting n be' and ending with 'letting nbObservations be fin4'
+# remove the block starting with 'letting n be' and ending with 'letting nbObservations be fin4'
 n_block_started = False
 n_block_ended = False
 final_lines = []
@@ -58,7 +57,7 @@ for line in new_lines:
         else:
             final_lines.append(line)
     else:
-        # Keep removing lines until we encounter 'letting nbObservations be '
+        # remove lines until we encounter 'letting nbObservations be '
         if line.startswith("letting nbObservations be "):
             n_block_ended = True
         # Skip lines in the 'letting n be' block
@@ -69,26 +68,16 @@ for line in new_lines:
 
 fl1 = []
 
-# Assuming final_lines is a list of lines
+
 for line in final_lines:
-    if "find" in line:  # Check if the line contains the keyword
-        break  # Exit the loop when the keyword is found
-    fl1.append(line)  # Use append() instead of add()
+    if "find" in line: 
+        break  
+    fl1.append(line)  
 
 with open(f"./Final-models/{model}-final/{model}.eprime", 'r') as file:
     lines = file.readlines()
     fl1.extend(lines)
 
-# Now write the modified lines back to the file
+# write the modified lines back to the file
 with open(f"./{output_dir}/{model}.eprime", 'w') as file:
     file.writelines(fl1) 
-
-
-
-
-
-
-
-
-
-

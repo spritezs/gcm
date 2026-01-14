@@ -36,7 +36,6 @@ def dominates(other_solution, solution):
             
     return True
 
-
 def filter_json(input_file, output_file):
    
     with open(input_file, 'r') as infile:
@@ -55,7 +54,6 @@ def filter_json(input_file, output_file):
 
             if keep_solution:
                 filtered_solutions.append(solution)
-        
 
     # Write the filtered solutions to the output file
     with open(output_file, 'w') as outfile:
@@ -65,7 +63,6 @@ def filter_json(input_file, output_file):
 
 input_file = os.path.join(output_dir, 'sols.json')
 output_file = os.path.join(output_dir, 'non-dominated.json')
-
 
 # Run the filter function
 filter_json(input_file, output_file)
